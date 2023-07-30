@@ -33,4 +33,4 @@ const studentSchema: Schema<StudentType> = new mongoose.Schema({
     }
 })
 
-export default mongoose.models.Todo || mongoose.model<StudentType>('Todo', studentSchema);
+export default mongoose.models.Student || mongoose.model<StudentType>('Student', studentSchema);

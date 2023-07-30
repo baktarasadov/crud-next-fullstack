@@ -11,9 +11,9 @@ export default async function handler(
     switch (requestType) {
         case "GET":
             try {
-                const data: Array<StudentType> = await student.find({});
+                const students: Array<StudentType> = await student.find({});
                 res.status(200).json({
-                    data: data,
+                    data: students,
                     success: true
                 })
             } catch (err) {
@@ -23,6 +23,20 @@ export default async function handler(
                 })
             }
             break;
+        case "POST":
+            try {
+                const createData = await student.create(req.body);
+                res.status(200).json({
+                    data: createData,
+                    success: true
+                })
+            } catch (error) {
+                res.status(400).json({
+                    error: error, success: false
+                })
+
+            }
+            break
 
         default:
             break;

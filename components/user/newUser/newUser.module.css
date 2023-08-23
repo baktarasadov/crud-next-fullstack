@@ -1,0 +1,22 @@
+.container {
+  position: absolute;
+  background-color: aqua;
+  padding: 50px;
+  margin-top: 60px;
+  width: 50%;
+  left: 20%;
+  border-radius: 10px;
+}
+
+.container form {
+  position: relative;
+}
+.container form div {
+  display: flex;
+  flex-direction: column;
+}
+
+.add {
+  width: 100%;
+  margin-top: 20px;
+}

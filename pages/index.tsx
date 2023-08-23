@@ -1,11 +1,40 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
+import Head from "next/head";
+import UserList from "@/components/user/userList";
+import { GetServerSideProps, NextPage } from "next";
+import { UserType } from "@/types/userTypes";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import Header from "@/components/header";
+export interface HomeProps {
+  serverData: UserType[];
+}
+const Home: NextPage<HomeProps> = ({ serverData }) => {
+  const router = useRouter();
+  const [userList, setUserList] = useState<UserType[]>(serverData);
 
-const inter = Inter({ subsets: ['latin'] })
+  const deleteUserByIdState = (id: string): void => {
+    setUserList(userList.filter((user) => user._id !== id));
+  };
+  const deleteUserById = async (id: string) => {
+    const response = await fetch(`http://localhost:3000/api/student/${id}`, {
+      method: "DELETE",
+    });
 
-export default function Home() {
+    if (!response.ok) {
+      throw new Error("User is not delete.");
+    }
+    deleteUserByIdState(id);
+    return response.json();
+  };
+
+  if (router.isFallback) {
+    return (
+      <>
+        <div>Loading....</div>
+      </>
+    );
+  }
+
   return (
     <>
       <Head>
@@ -14,101 +43,23 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={`${styles.main} ${inter.className}`}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.tsx</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
-        </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
+      <Header setUserList={setUserList} userList={userList} />
+      <main>
+        <UserList deleteUserById={deleteUserById} data={userList} />
       </main>
     </>
-  )
-}
+  );
+};
+
+export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
+  const response = await fetch("http://localhost:3000/api/student");
+  const data = await response.json();
+
+  return {
+    props: {
+      serverData: data.data,
+    },
+  };
+};
+
+export default Home;

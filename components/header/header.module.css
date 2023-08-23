@@ -1,0 +1,38 @@
+.header_container nav ul {
+  display: flex;
+  justify-content: space-around;
+  height: 80px;
+  align-items: center;
+  background-color: #a084e8ed;
+}
+.header_container nav ul li:first-child {
+  padding: 10px 20px;
+  background-color: #6f61c0;
+  border-radius: 20px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.header_container nav ul li input {
+  outline: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.header_container nav ul li button {
+  padding: 15px 20px;
+  font-size: 15px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  background-color: #8062d6;
+  color: #fff;
+  font-weight: bolder;
+  cursor: pointer;
+  border: 0;
+  border-radius: 5px;
+}
+.cancel {
+  color: red;
+}

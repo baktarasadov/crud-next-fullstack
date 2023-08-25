@@ -13,7 +13,9 @@ const UserItem: React.FC<userItemPropsType> = ({
         <li>{name}</li>
         <li>
           <ul>
-            <li className={style.edit_button}>edit</li>
+            <li onClick={} className={style.edit_button}>
+              edit
+            </li>
             <li
               className={style.delete_button}
               onClick={() => deleteUserById(id)}

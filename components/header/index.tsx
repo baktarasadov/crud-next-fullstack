@@ -6,7 +6,7 @@ import NewUser from "../user/newUser";
 import { GiCancel } from "react-icons/gi";
 import { HeaderPropsType } from "@/types/userTypes";
 
-const Header: React.FC<HeaderPropsType> = () => {
+const Header: React.FC<HeaderPropsType> = ({ userList, setUserList }) => {
   const [click, setClick] = useState<boolean>(false);
   return (
     <React.Fragment>
@@ -44,7 +44,9 @@ const Header: React.FC<HeaderPropsType> = () => {
                 </button>
               )}
 
-              {click && <NewUser />}
+              {click && (
+                <NewUser setUserList={setUserList} userList={userList} />
+              )}
             </li>
           </ul>
         </nav>

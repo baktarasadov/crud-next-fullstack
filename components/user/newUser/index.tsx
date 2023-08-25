@@ -1,8 +1,8 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import style from "./newUser.module.css";
-import { NewUserPropsType, UserData } from "@/types/userTypes";
+import { NewUserPropsType, UserData, UserType } from "@/types/userTypes";
 
-const NewUser: React.FC<NewUserPropsType> = ({ setUserList }) => {
+const NewUser: React.FC<NewUserPropsType> = ({ userList, setUserList }) => {
   const [userData, setUserData] = useState<UserData>({
     name: "",
     surname: "",
@@ -21,8 +21,10 @@ const NewUser: React.FC<NewUserPropsType> = ({ setUserList }) => {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    console.log(userData);
+
     try {
-      const response = await fetch("`http://localhost:3000/api/student", {
+      const response = await fetch("http://localhost:3000/api/student", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,6 +32,25 @@ const NewUser: React.FC<NewUserPropsType> = ({ setUserList }) => {
         body: JSON.stringify(userData),
       });
       if (response.ok) {
+        const { data } = await response.json();
+
+        const ok: UserType = {
+          _id: data._id,
+          name: data.name,
+          surname: data.surname,
+          email: data.email,
+          password: data.password,
+          age: data.age,
+        };
+        const array: UserType[] = [...userList, ok];
+        setUserList(array);
+        setUserData({
+          name: "",
+          surname: "",
+          password: "",
+          email: "",
+          age: 0,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -38,7 +59,7 @@ const NewUser: React.FC<NewUserPropsType> = ({ setUserList }) => {
   return (
     <React.Fragment>
       <div className={style.container}>
-        <form onSubmit={handleSubmit}>
+        <form>
           <div>
             <label htmlFor="name">Name</label>
             <input
@@ -89,7 +110,12 @@ const NewUser: React.FC<NewUserPropsType> = ({ setUserList }) => {
               onChange={handleInputChange}
             />
           </div>
-          <button className={style.add} type="submit">
+          <button
+            onClick={(event) => {
+              handleSubmit(event);
+            }}
+            className={style.add}
+          >
             ADD
           </button>
         </form>
